@@ -1,0 +1,9 @@
+variable "asg_name" {}
+variable "instance_name" {}
+variable "target_group_arns" {}
+variable "min_size" {}
+variable "max_size" {}
+variable "desired_capacity" {}
+variable "instance_type" {}
+variable "security_group_ids" {}
+variable "iam_instance" {}

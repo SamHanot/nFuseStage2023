@@ -1,0 +1,11 @@
+sonarqube/environments/dev/.terragrunt-cache/
+sonarqube/environments/dev/.terraform.lock.hcl
+
+sonarqube/environments/test/.terragrunt-cache/
+sonarqube/environments/test/.terraform.lock.hcl
+
+sonarqube/environments/acc/.terragrunt-cache/
+sonarqube/environments/acc/.terraform.lock.hcl
+
+sonarqube/environments/prod/.terragrunt-cache/
+sonarqube/environments/prod/.terraform.lock.hcl

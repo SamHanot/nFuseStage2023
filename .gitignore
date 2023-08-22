@@ -9,3 +9,5 @@ sonarqube/environments/acc/.terraform.lock.hcl
 
 sonarqube/environments/prod/.terragrunt-cache/
 sonarqube/environments/prod/.terraform.lock.hcl
+
+sonarqube/terraform.tfvars

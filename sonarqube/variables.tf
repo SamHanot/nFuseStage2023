@@ -16,8 +16,6 @@ variable "security_group_name" {
 }
 
 
-variable "load_balancer_name" {}
-variable "target_port" {}
 
 variable "instance_type" {}
 

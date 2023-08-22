@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "../../../sonarqube"
+  source = "sonarqube/main.tf"
 }
 
 inputs = {

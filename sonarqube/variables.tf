@@ -11,8 +11,6 @@ variable "private_data_cidrs" {
   type = list(any)
 }
 
-variable "instance_type" {}
-
 variable "postgres_username" {}
 variable "postgres_password" {}
 

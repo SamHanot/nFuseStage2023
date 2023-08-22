@@ -2,7 +2,7 @@ include {
   path = find_in_parent_folders()
 }
 
-inputs {
+inputs =  {
   #vpc
 region             = "eu-west-1"
 project_name       = "sonarqube"

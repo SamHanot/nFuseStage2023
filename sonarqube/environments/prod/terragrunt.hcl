@@ -6,10 +6,10 @@ inputs {
   #vpc
 region             = "eu-west-1"
 project_name       = "sonarqube"
-vpc_cidr           = "10.0.0.0/16"
-public_cidrs       = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
-private_app_cidrs  = ["10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
-private_data_cidrs = ["10.0.6.0/24", "10.0.7.0/24", "10.0.8.0/24"]
+vpc_cidr           = "10.3.0.0/16"
+public_cidrs       = ["10.3.0.0/24", "10.3.1.0/24", "10.3.2.0/24"]
+private_app_cidrs  = ["10.3.3.0/24", "10.3.4.0/24", "10.3.5.0/24"]
+private_data_cidrs = ["10.3.6.0/24", "10.3.7.0/24", "10.3.8.0/24"]
 
 #app_load_balancer_security_group
 app_lb_sg_rules = [{ type = "ingress", port = 80, cidr_blocks = ["0.0.0.0/0"], security_groups = null }]

@@ -21,35 +21,44 @@ module "app_load_balancer_security_group" {
   source              = "../modules/security_group"
   security_group_name = "app-load-balancer"
   vpc_id              = module.vpc.vpc_id
-  rules               = var.app_lb_sg_rules
+  rules               = [{ type = "ingress", port = 80, cidr_blocks = ["0.0.0.0/0"], security_groups = null }]
 }
 
 module "network_load_balancer_security_group" {
   source              = "../modules/security_group"
   security_group_name = "net-load-balancer"
   vpc_id              = module.vpc.vpc_id
-  rules               = var.net_lb_sg_rules
+  rules               = [{ type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }]
 }
 
 module "app_security_group" {
   source              = "../modules/security_group"
   security_group_name = "application"
   vpc_id              = module.vpc.vpc_id
-  rules               = var.app_sg_rules
+  rules = [{ type = "ingress", port = 9000, cidr_blocks = null, security_groups = module.app_load_balancer_security_group.security_group_id },
+    { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
+    { type = "ingress", port = 9003, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }
+  ]
 }
 
 module "search_security_group" {
   source              = "../modules/security_group"
   security_group_name = "search"
   vpc_id              = module.vpc.vpc_id
-  rules               = var.search_sg_rules
+  rules = [
+    { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.network_load_balancer_security_group.security_group_id },
+    { type = "ingress", port = 9002, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
+  ]
 }
 
 module "data_security_group" {
   source              = "../modules/security_group"
   security_group_name = "data"
   vpc_id              = module.vpc.vpc_id
-  rules               = var.data_sg_rules
+  rules = [
+    { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
+    { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.search_security_group.security_group_id }
+  ]
 
 }
 

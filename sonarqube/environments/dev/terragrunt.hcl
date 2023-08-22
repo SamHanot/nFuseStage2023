@@ -15,30 +15,6 @@ public_cidrs       = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
 private_app_cidrs  = ["10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
 private_data_cidrs = ["10.0.6.0/24", "10.0.7.0/24", "10.0.8.0/24"]
 
-#app_load_balancer_security_group
-app_lb_sg_rules = [{ type = "ingress", port = 80, cidr_blocks = ["0.0.0.0/0"], security_groups = null }]
-
-#network_load_balancer_security_group
-net_lb_sg_rules = [{ type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }]
-
-#app_sg
-app_sg_rules = [{ type = "ingress", port = 9000, cidr_blocks = null, security_groups = module.app_load_balancer_security_group.security_group_id },
-  { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
-  { type = "ingress", port = 9003, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }
-]
-
-#search_sg
-search_sg_rules = [
-  { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.network_load_balancer_security_group.security_group_id },
-  { type = "ingress", port = 9002, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
-]
-
-#data_sg
-data_sg_rules = [
-  { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-  { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.search_security_group.security_group_id }
-]
-
 #app load balancer
 app_lb_name          = "external"
 app_lb_type          = "application"

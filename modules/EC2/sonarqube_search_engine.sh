@@ -24,26 +24,10 @@ sudo yum install java-17-amazon-corretto.x86_64 -y
 
 
 # Install and configure PostgreSQL & Create a user and database for sonar
-# wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-# sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-# sudo apt install postgresql postgresql-contrib -y
-# sudo systemctl enable postgresql.service
-# sudo systemctl start  postgresql.service
-# sudo echo "postgres:admin123" | chpasswd
-# runuser -l postgres -c "createuser sonar"
-# sudo -i -u postgres psql -c "ALTER USER sonar WITH ENCRYPTED PASSWORD 'admin123';"
-# sudo -i -u postgres psql -c "CREATE DATABASE sonarqube OWNER sonar;"
-# sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE sonarqube to sonar;"
-# sudo systemctl restart  postgresql
 sudo amazon-linux-extras install postgresql14 -y
 
 
 #Download the binaries for SonarQube 
-# sudo mkdir -p /sonarqube/
-# cd /sonarqube/
-# sudo curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.0.65466.zip
-# sudo apt-get install zip -y
-# sudo unzip -o sonarqube-9.9.0.65466.zip -d /opt/
 yum install unzip -y
 yum install net-tools
 wget https://binaries.sonarsource.com/CommercialDistribution/sonarqube-datacenter/sonarqube-datacenter-10.1.0.73491.zip

@@ -11,12 +11,6 @@ variable "private_data_cidrs" {
   type = list(any)
 }
 
-variable "security_group_name" {
-  default = "undefined"
-}
-
-
-
 variable "instance_type" {}
 
 variable "postgres_username" {}

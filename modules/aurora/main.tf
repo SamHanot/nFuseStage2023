@@ -17,8 +17,8 @@ resource "aws_rds_cluster" "cluster" {
   #for multi-az:
   db_cluster_instance_class = "db.r6gd.large"
   storage_type              = "io1"
-  allocated_storage         = 100  #miss aanpassen (ik denk dat 100 GiB wel genoeg is ~12,5 GB)
-  iops                      = 1000 #miss aanpassen (max 19950 denk ik)
+  allocated_storage         = 100
+  iops                      = 1000
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {

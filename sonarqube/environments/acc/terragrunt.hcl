@@ -2,6 +2,10 @@ include {
   path = find_in_parent_folders()
 }
 
+terraform {
+  source = "../../../sonarqube"
+}
+
 inputs =  {
   #vpc
 region             = "eu-west-1"

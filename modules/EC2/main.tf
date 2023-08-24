@@ -20,7 +20,7 @@ resource "aws_instance" "ec2_instance" {
   key_name        = "EC2sonarqubeKeyPair"
   user_data       = file(var.file_path)
   tags = {
-    Name = "${var.instance_name}-${count.index}"
+    Name = "${var.instance_name}-${count.index + 1}"
   }
   # user_data            = base64encode(templatefile(var.file_path, { db_endpoint = var.db_write_endpoint }))
 }

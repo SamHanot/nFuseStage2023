@@ -16,14 +16,14 @@ private_app_cidrs  = ["10.1.3.0/24", "10.1.4.0/24", "10.1.5.0/24"]
 private_data_cidrs = ["10.1.6.0/24", "10.1.7.0/24", "10.1.8.0/24"]
 
 #app load balancer
-app_lb_name          = "external"
+app_lb_name          = "external-test"
 app_lb_type          = "application"
 app_lb_listener_port = 80
 app_lb_target_port   = 9003
 app_lb_protocol      = "HTTP"
 
 #net load balancer
-net_lb_name          = "internal"
+net_lb_name          = "internal-test"
 net_lb_type          = "network"
 net_lb_listener_port = 9001
 net_lb_target_port   = 9001

@@ -15,10 +15,10 @@ resource "aws_rds_cluster" "cluster" {
   preferred_backup_window = "03:00-04:00"
 
   #for multi-az:
-  //db_cluster_instance_class = "db.r6gd.large"
-  storage_type      = "io1"
-  allocated_storage = 100
-  iops              = 1000
+  db_cluster_instance_class = "db.r6gd.large"
+  storage_type              = "io1"
+  allocated_storage         = 100
+  iops                      = 1000
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {

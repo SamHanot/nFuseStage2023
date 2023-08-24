@@ -33,13 +33,13 @@ net_lb_protocol      = "TCP"
 app_instance_type  = "t2.large"
 app_instance_count = 2
 app_file_path      = "../modules/EC2/sonarqube_compute_engine.sh"
-app_name           = "app"
+app_name           = "dev-app"
 
 #search EC2
 search_instance_type  = "t2.large"
 search_instance_count = 3
 search_file_path = "../modules/EC2/sonarqube_search_engine.sh"
-search_name           = "search"
+search_name           = "dev-search"
 
 #aurora
 postgres_username = "SonarQube"

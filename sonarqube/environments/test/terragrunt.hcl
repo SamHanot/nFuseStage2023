@@ -9,7 +9,7 @@ terraform {
 inputs = {
   #vpc
 region             = "eu-west-1"
-project_name       = "sonarqube"
+project_name       = "sonarqube-test"
 vpc_cidr           = "10.1.0.0/16"
 public_cidrs       = ["10.1.0.0/24", "10.1.1.0/24", "10.1.2.0/24"]
 private_app_cidrs  = ["10.1.3.0/24", "10.1.4.0/24", "10.1.5.0/24"]

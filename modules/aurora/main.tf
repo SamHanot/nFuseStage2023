@@ -25,7 +25,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = var.cluster_instances_count
   identifier         = "${var.project_name}-${count.index}"
   cluster_identifier = aws_rds_cluster.cluster.id
-  instance_class     = "db.t3.medium"
+  instance_class     = aws_rds_cluster.cluster.engine.instance_class
   engine             = aws_rds_cluster.cluster.engine
   engine_version     = aws_rds_cluster.cluster.engine_version
 

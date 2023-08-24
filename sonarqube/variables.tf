@@ -26,10 +26,12 @@ variable "net_lb_protocol" {}
 variable "app_instance_type" {}
 variable "app_instance_count" {}
 variable "app_file_path" {}
+variable "app_name" {}
 
 variable "search_instance_type" {}
 variable "search_instance_count" {}
 variable "search_file_path" {}
+variable "search_name" {}
 
 variable "postgres_username" {}
 variable "postgres_password" {}

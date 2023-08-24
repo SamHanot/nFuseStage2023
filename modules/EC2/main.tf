@@ -19,6 +19,9 @@ resource "aws_instance" "ec2_instance" {
   security_groups = var.security_group_id
   key_name        = "EC2sonarqubeKeyPair"
   user_data       = file(var.file_path)
+  tags = {
+    Name = "${var.instance_name}-${count.index}"
+  }
   # user_data            = base64encode(templatefile(var.file_path, { db_endpoint = var.db_write_endpoint }))
 }
 

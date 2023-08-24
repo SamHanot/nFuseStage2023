@@ -96,6 +96,7 @@ module "app_EC2" {
   instance_count    = var.app_instance_count
   file_path         = var.app_file_path
   #db_write_endpoint = module.aurora.rds_writer_endpoint
+  instance_name = var.app_name
 }
 
 
@@ -116,5 +117,6 @@ module "search_EC2" {
   subnet_ids        = module.vpc.private_app_subnet_ids
   instance_count    = var.search_instance_count
   file_path         = var.search_file_path
+  instance_name     = var.search_name
   #db_write_endpoint = module.aurora.rds_writer_endpoint
 }

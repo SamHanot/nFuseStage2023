@@ -11,10 +11,10 @@ resource "aws_rds_cluster" "cluster" {
 
   db_subnet_group_name = aws_db_subnet_group.db_subnet_group.name
 
-  backup_retention_period = 0
-  //preferred_backup_window = "03:00-04:00"
-  skip_final_snapshot = true
-  apply_immediately   = true
+  backup_retention_period = 1
+  preferred_backup_window = "03:00-04:00"
+  skip_final_snapshot     = true
+  apply_immediately       = true
 
   #for multi-az:
   db_cluster_instance_class = "db.m5d.large"

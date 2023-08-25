@@ -99,7 +99,7 @@ module "app_EC2" {
   instance_name = var.app_name
 }
 
-
+/*
 module "aurora" {
   source                  = "../modules/aurora"
   project_name            = var.project_name
@@ -109,7 +109,7 @@ module "aurora" {
   private_subnets         = module.vpc.private_data_subnet_ids
   security_groups         = [module.data_security_group.security_group_id]
 }
-
+*/
 module "search_EC2" {
   source            = "../modules/EC2"
   instance_type     = var.search_instance_type

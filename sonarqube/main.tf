@@ -17,55 +17,88 @@ module "nat_gateway" {
   private_data_subnet_ids = module.vpc.private_data_subnet_ids
 }
 
-module "load_balancer_security_group" {
+module "app_load_balancer_security_group" {
   source              = "../modules/security_group"
-  security_group_name = "load-balancer"
+  security_group_name = "app-load-balancer"
   vpc_id              = module.vpc.vpc_id
-  rules = [{ type = "ingress", port = 80, cidr_blocks = ["0.0.0.0/0"], security_groups = null },
-  { type = "egress", port = 9000, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }]
+  rules               = [{ type = "ingress", port = 80, cidr_blocks = ["0.0.0.0/0"], security_groups = null }]
+}
+
+module "network_load_balancer_security_group" {
+  source              = "../modules/security_group"
+  security_group_name = "net-load-balancer"
+  vpc_id              = module.vpc.vpc_id
+  rules               = [{ type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }]
 }
 
 module "app_security_group" {
   source              = "../modules/security_group"
   security_group_name = "application"
   vpc_id              = module.vpc.vpc_id
-  rules = [{ type = "ingress", port = 9000, cidr_blocks = null, security_groups = module.load_balancer_security_group.security_group_id },
-    { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "ingress", port = 9002, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "ingress", port = 9003, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "egress", port = 9001, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "egress", port = 9002, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "egress", port = 9003, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
-    { type = "egress", port = 5432, cidr_blocks = null, security_groups = module.data_security_group.security_group_id },
-  { type = "egress", port = 443, cidr_blocks = ["0.0.0.0/0"], security_groups = null }]
+  rules = [{ type = "ingress", port = 9000, cidr_blocks = null, security_groups = module.app_load_balancer_security_group.security_group_id },
+    { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
+    { type = "ingress", port = 9003, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }
+  ]
+}
+
+module "search_security_group" {
+  source              = "../modules/security_group"
+  security_group_name = "search"
+  vpc_id              = module.vpc.vpc_id
+  rules = [
+    { type = "ingress", port = 9001, cidr_blocks = null, security_groups = module.network_load_balancer_security_group.security_group_id },
+    { type = "ingress", port = 9002, cidr_blocks = null, security_groups = module.search_security_group.security_group_id },
+  ]
 }
 
 module "data_security_group" {
   source              = "../modules/security_group"
   security_group_name = "data"
   vpc_id              = module.vpc.vpc_id
-  rules               = [{ type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.app_security_group.security_group_id }]
+  rules = [
+    { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.app_security_group.security_group_id },
+    { type = "ingress", port = 5432, cidr_blocks = null, security_groups = module.search_security_group.security_group_id }
+  ]
+
 }
 
-module "load_balancer" {
+module "app_load_balancer" {
   source             = "../modules/load_balancer"
-  load_balancer_name = var.load_balancer_name
-  public_subnet_ids  = module.vpc.public_subnet_ids
+  load_balancer_name = var.app_lb_name
+  lb_type            = var.app_lb_type
+  subnet_ids         = module.vpc.public_subnet_ids
   vpc_id             = module.vpc.vpc_id
-  security_groups_id = [module.load_balancer_security_group.security_group_id]
+  security_groups_id = [module.app_load_balancer_security_group.security_group_id]
+  listener_port      = var.app_lb_listener_port
   target_ids         = module.app_EC2.instance_ids
-  target_port        = var.target_port
+  target_port        = var.app_lb_target_port
+  protocol           = var.app_lb_protocol
+}
+
+module "network_load_balancer" {
+  source             = "../modules/load_balancer"
+  load_balancer_name = var.net_lb_name
+  lb_type            = var.net_lb_type
+  subnet_ids         = module.vpc.private_app_subnet_ids
+  vpc_id             = module.vpc.vpc_id
+  security_groups_id = [module.network_load_balancer_security_group.security_group_id]
+  listener_port      = var.net_lb_listener_port
+  target_ids         = module.search_EC2.instance_ids
+  target_port        = var.net_lb_target_port
+  protocol           = var.net_lb_protocol
 }
 
 module "app_EC2" {
   source            = "../modules/EC2"
-  instance_type     = var.instance_type
+  instance_type     = var.app_instance_type
   security_group_id = [module.app_security_group.security_group_id]
   subnet_ids        = module.vpc.private_app_subnet_ids
-  instance_count    = 2
-  file_path         = "../modules/EC2/sonarqube_compute_engine.sh"
+  instance_count    = var.app_instance_count
+  file_path         = var.app_file_path
   #db_write_endpoint = module.aurora.rds_writer_endpoint
+  instance_name = var.app_name
 }
+
 
 module "aurora" {
   source                  = "../modules/aurora"
@@ -79,10 +112,11 @@ module "aurora" {
 
 module "search_EC2" {
   source            = "../modules/EC2"
-  instance_type     = var.instance_type
-  security_group_id = [module.app_security_group.security_group_id]
+  instance_type     = var.search_instance_type
+  security_group_id = [module.search_security_group.security_group_id]
   subnet_ids        = module.vpc.private_app_subnet_ids
-  instance_count    = 3
-  file_path         = "../modules/EC2/sonarqube_search_engine.sh"
+  instance_count    = var.search_instance_count
+  file_path         = var.search_file_path
+  instance_name     = var.search_name
   #db_write_endpoint = module.aurora.rds_writer_endpoint
 }

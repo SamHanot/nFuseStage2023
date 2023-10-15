@@ -7,4 +7,5 @@ variable "subnet_ids" {
 variable "instance_type" {}
 variable "instance_count" {}
 variable "file_path" {}
+variable "instance_name" {}
 #variable "db_write_endpoint" {}

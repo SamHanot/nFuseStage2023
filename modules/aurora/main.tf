@@ -11,21 +11,23 @@ resource "aws_rds_cluster" "cluster" {
 
   db_subnet_group_name = aws_db_subnet_group.db_subnet_group.name
 
-  backup_retention_period = 7
+  backup_retention_period = 1
   preferred_backup_window = "03:00-04:00"
+  skip_final_snapshot     = true
+  apply_immediately       = true
 
   #for multi-az:
-  db_cluster_instance_class = "db.r6gd.large"
+  db_cluster_instance_class = "db.m5d.large"
   storage_type              = "io1"
-  allocated_storage         = 100  #miss aanpassen (ik denk dat 100 GiB wel genoeg is ~12,5 GB)
-  iops                      = 1000 #miss aanpassen (max 19950 denk ik)
+  allocated_storage         = 100
+  iops                      = 1000
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = var.cluster_instances_count
   identifier         = "${var.project_name}-${count.index}"
   cluster_identifier = aws_rds_cluster.cluster.id
-  instance_class     = "db.t3.medium"
+  instance_class     = "db.m5d.large"
   engine             = aws_rds_cluster.cluster.engine
   engine_version     = aws_rds_cluster.cluster.engine_version
 
